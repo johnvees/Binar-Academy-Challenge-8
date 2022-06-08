@@ -8,7 +8,12 @@ const Header = ({title, type, onPress, src}) => {
   if (type === 'logo') {
     return (
       <SafeAreaView>
-        <Image source={{uri: src}} style={styles.logo} />
+        <Image
+          source={{
+            uri: 'https://logos-world.net/wp-content/uploads/2020/05/Pokemon-Logo.png',
+          }}
+          style={styles.logo}
+        />
         <Gap height={ms(32)} />
       </SafeAreaView>
     );

@@ -9,14 +9,14 @@ const MainStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="Login">
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name='Register' component={Register} />
-          <Stack.Screen name='FinalRegist' component={FinalRegist} />
-          <Stack.Screen name='Home' component={Home} />
-          <Stack.Screen name='Details' component={Details} />
-          <Stack.Screen name='Bag' component={Bag} />
-      </Stack.Navigator>
+      initialRouteName="Register">
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="FinalRegist" component={FinalRegist} />
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Details" component={Details} />
+      <Stack.Screen name="Bag" component={Bag} />
+    </Stack.Navigator>
   );
 };
 

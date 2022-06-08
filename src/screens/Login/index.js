@@ -5,7 +5,6 @@ import {ms} from 'react-native-size-matters';
 
 import {Button, Gap, Header} from '../../components';
 import {colors, fonts} from '../../utils';
-import {replace} from 'formik';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -14,12 +13,7 @@ const Login = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header
-          type={'logo'}
-          src={
-            'https://logos-world.net/wp-content/uploads/2020/05/Pokemon-Logo.png'
-          }
-        />
+        <Header type={'logo'} />
         <Text style={styles.title}>Welcome Back</Text>
         <Gap height={ms(16)} />
         <TextInput
