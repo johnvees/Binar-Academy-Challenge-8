@@ -3,7 +3,7 @@ import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
 import {colors, fonts} from '../../utils';
-import {Gap, Header} from '../../components';
+import {Button, Gap, Header} from '../../components';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 const Home = () => {
@@ -36,6 +36,16 @@ const Home = () => {
           />
           <Text style={styles.pokeName}>Nama Pokemon</Text>
         </View>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Button type={'fullButton'} title={'Previous'} />
+        <Text>1</Text>
+        <Button type={'fullButton'} title={'Next'} />
       </View>
     </SafeAreaView>
   );
