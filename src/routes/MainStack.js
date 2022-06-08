@@ -9,7 +9,7 @@ const MainStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="FinalRegist">
+      initialRouteName="Home">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="FinalRegist" component={FinalRegist} />

@@ -7,7 +7,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Gap from '../Gap';
 import {colors, fonts} from '../../utils';
 
-const Header = ({title, type, onPress, src}) => {
+const Header = ({title, primaryTitle, secondaryTitle, type, onPress, src}) => {
   if (type === 'logo') {
     return (
       <SafeAreaView>
@@ -29,12 +29,29 @@ const Header = ({title, type, onPress, src}) => {
         <View
           style={{
             flex: 1,
-            // backgroundColor: colors.icon.danger,
             alignItems: 'center',
             marginStart: ms(-24),
           }}>
           <Text style={styles.title}>{title}</Text>
         </View>
+      </SafeAreaView>
+    );
+  } else if (type === 'main') {
+    return (
+      <SafeAreaView style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            marginEnd: ms(-24),
+          }}>
+          <TouchableOpacity onPress={onPress}>
+            <Text style={styles.title}>{primaryTitle}</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={onPress}>
+          <Text style={styles.secondaryTitle}>{secondaryTitle}</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -51,5 +68,10 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
     fontFamily: fonts.primary[500],
     fontSize: ms(24),
+  },
+  secondaryTitle: {
+    color: colors.text.primary,
+    fontFamily: fonts.primary[400],
+    fontSize: ms(16),
   },
 });
