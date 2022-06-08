@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import MainStack from './MainStack';
 
-const index = () => {
+const Root = () => {
   return (
     <NavigationContainer>
       <MainStack />
@@ -12,6 +12,6 @@ const index = () => {
   );
 };
 
-export default index;
+export default Root;
 
 const styles = StyleSheet.create({});
