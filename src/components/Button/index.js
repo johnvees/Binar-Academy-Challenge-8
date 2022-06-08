@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   secondaryTitle: {
     fontSize: ms(14),
     fontFamily: fonts.primary[400],
-    color: colors.text.secondary,
+    color: colors.text.primary,
     textAlign: 'center',
   },
   primaryTitle: {

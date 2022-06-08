@@ -49,7 +49,11 @@ const Register = ({navigation}) => {
           }}
         />
         <Gap height={ms(32)} />
-        <Button type={'fullButton'} title={'Save and Continue'} />
+        <Button
+          type={'fullButton'}
+          title={'Save and Continue'}
+          onPress={() => navigation.navigate('FinalRegist')}
+        />
       </ScrollView>
       <View style={{flex: 1, justifyContent: 'flex-end'}}>
         <Button
