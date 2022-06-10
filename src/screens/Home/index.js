@@ -1,12 +1,63 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
-import {colors, fonts} from '../../utils';
+import {BASE_URL, colors, fonts} from '../../utils';
 import {Button, Gap, Header} from '../../components';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
+import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
 
 const Home = () => {
+  const [pokemon, setPokemon] = useState('');
+  const navigation = useNavigation();
+
+  const getListPokemon = async () => {
+    try {
+      setPokemon('');
+      const result = await axios.get(`${BASE_URL}/pokemon`);
+      setPokemon(result.data.results);
+      // const getURL = result.data.results.map(name => {
+      //   return name.name;
+      // });
+      // console.log(getURL);
+      // const hasil2 = await axios.get(`${BASE_URL}/pokemon/${getURL.map}`);
+      console.log(result.data.results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getListPokemon();
+  }, []);
+
+  const cardPokemon = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPress={
+          (() => navigation.navigate('Details'), {name: `${item.name}`})
+        }>
+        <View style={styles.background}>
+          <Image
+            source={{
+              uri: 'https://logos-world.net/wp-content/uploads/2020/05/Pokemon-Logo.png',
+            }}
+            style={styles.pokeImg}
+          />
+          <Text style={styles.pokeName}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header type={'main'} primaryTitle={'PokeDex'} secondaryTitle={'Bag'} />
@@ -17,26 +68,14 @@ const Home = () => {
         style={styles.logo}
       />
       <Gap height={ms(24)} />
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <View style={styles.background}>
-          <Image
-            source={{
-              uri: 'https://logos-world.net/wp-content/uploads/2020/05/Pokemon-Logo.png',
-            }}
-            style={styles.pokeImg}
-          />
-          <Text style={styles.pokeName}>Nama Pokemon</Text>
-        </View>
-        <View style={styles.background}>
-          <Image
-            source={{
-              uri: 'https://logos-world.net/wp-content/uploads/2020/05/Pokemon-Logo.png',
-            }}
-            style={styles.pokeImg}
-          />
-          <Text style={styles.pokeName}>Nama Pokemon</Text>
-        </View>
-      </View>
+
+      <FlatList
+        numColumns={2}
+        data={pokemon}
+        keyExtractor={(item, index) => index}
+        renderItem={cardPokemon}
+      />
+
       <View
         style={{
           flexDirection: 'row',
@@ -65,6 +104,8 @@ const styles = StyleSheet.create({
   },
   background: {
     width: widthPercentageToDP('40%'),
+    marginBottom: ms(16),
+    marginEnd: ms(16),
     borderRadius: ms(4),
     height: ms(40),
     padding: ms(8),
@@ -91,5 +132,6 @@ const styles = StyleSheet.create({
     fontSize: ms(12),
     fontFamily: fonts.primary[400],
     color: colors.text.primary,
+    textTransform: 'capitalize',
   },
 });
