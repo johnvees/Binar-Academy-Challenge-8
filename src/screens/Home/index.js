@@ -1,35 +1,29 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import {FlatList} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
-import {BASE_URL, colors, fonts} from '../../utils';
-import {Button, Gap, Header} from '../../components';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 
+import {BASE_URL, colors, fonts} from '../../utils';
+import {Button, Gap, Header} from '../../components';
+
 const Home = () => {
-  const [pokemon, setPokemon] = useState('');
+  const [pokemon, setPokemon] = useState([]);
   const navigation = useNavigation();
 
   const getListPokemon = async () => {
     try {
       setPokemon('');
-      const result = await axios.get(`${BASE_URL}/pokemon`);
+      const result = await axios.get(`${BASE_URL}`);
       setPokemon(result.data.results);
       // const getURL = result.data.results.map(name => {
       //   return name.name;
       // });
       // console.log(getURL);
       // const hasil2 = await axios.get(`${BASE_URL}/pokemon/${getURL.map}`);
-      console.log(result.data.results);
     } catch (error) {
       console.log(error);
     }
@@ -39,16 +33,22 @@ const Home = () => {
     getListPokemon();
   }, []);
 
+  console.log(pokemon);
+
   const cardPokemon = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={
-          (() => navigation.navigate('Details'), {name: `${item.name}`})
+        onPress={() =>
+          navigation.navigate(
+            'Details',
+            {name: `${item.name}`},
+            console.log(item.name),
+          )
         }>
         <View style={styles.background}>
           <Image
             source={{
-              uri: 'https://logos-world.net/wp-content/uploads/2020/05/Pokemon-Logo.png',
+              uri: `https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/${item.name}.png`,
             }}
             style={styles.pokeImg}
           />
@@ -71,6 +71,7 @@ const Home = () => {
 
       <FlatList
         numColumns={2}
+        showsVerticalScrollIndicator={false}
         data={pokemon}
         keyExtractor={(item, index) => index}
         renderItem={cardPokemon}
