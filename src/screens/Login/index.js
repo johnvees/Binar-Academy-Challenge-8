@@ -2,6 +2,8 @@ import {StyleSheet, Text, View, ScrollView, TextInput} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 import {Button, Gap, Header} from '../../components';
 import {colors, fonts} from '../../utils';
@@ -10,40 +12,76 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const loginValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email('Please enter valid email')
+      .required('Email Address is Required'),
+    password: yup
+      .string()
+      .min(8, ({min}) => `Password must be at least ${min} characters`)
+      .required('Password is required'),
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header type={'logo'} />
         <Text style={styles.title}>Welcome Back</Text>
         <Gap height={ms(16)} />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email Here"
-          placeholderTextColor={colors.text.secondary}
-          selectionColor={colors.text.tertiary}
-          value={email}
-          onChangeText={value => {
-            setEmail(value);
-          }}
-        />
-        <Gap height={ms(16)} />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password Here"
-          placeholderTextColor={colors.text.secondary}
-          selectionColor={colors.text.tertiary}
-          secureTextEntry={true}
-          value={password}
-          onChangeText={value => {
-            setPassword(value);
-          }}
-        />
-        <Gap height={ms(32)} />
-        <Button
-          type={'fullButton'}
-          title={'Login'}
-          onPress={() => navigation.replace('Home')}
-        />
+        <Formik
+          validationSchema={loginValidationSchema}
+          initialValues={{email: '', password: ''}}
+          onSubmit={values => console.log(values)}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            isValid,
+          }) => (
+            <>
+              <TextInput
+                name="email"
+                style={styles.textInput}
+                placeholder="Email Here"
+                placeholderTextColor={colors.text.secondary}
+                selectionColor={colors.text.tertiary}
+                keyboardType="email-address"
+                value={values.email}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+              />
+              {errors.email && touched.email && (
+                <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>
+              )}
+              <Gap height={ms(16)} />
+              <TextInput
+                name="password"
+                style={styles.textInput}
+                placeholder="Password Here"
+                placeholderTextColor={colors.text.secondary}
+                selectionColor={colors.text.tertiary}
+                secureTextEntry={true}
+                value={values.password}
+                onChangeText={handleChange('password')}
+              />
+              {errors.password && touched.password && (
+                <Text style={{ fontSize: 10, color: 'red' }}>{errors.password}</Text>
+              )}
+              <Gap height={ms(32)} />
+              <Button
+                type={'fullButton'}
+                title={'Login'}
+                onPress={handleSubmit}
+                disabled={!isValid}
+                // () => navigation.replace('Home')
+              />
+            </>
+          )}
+        </Formik>
       </ScrollView>
       <View style={{flex: 1, justifyContent: 'flex-end'}}>
         <Button
