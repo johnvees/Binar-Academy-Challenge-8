@@ -1,16 +1,49 @@
 import {StyleSheet, Text, View, ScrollView, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 
+import {Fire} from '../../configs';
 import {Button, Gap, Header} from '../../components';
 import {colors, fonts} from '../../utils';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+   useEffect(() => {
+     const unsubscribe = Fire.auth().onAuthStateChanged(user => {
+       if (user) {
+         console.log('user: ', user);
+         navigation.replace('Home');
+       }
+     });
+     return () => unsubscribe();
+   }, [navigation]);
+
+  const postLogin = values => {
+    Fire.auth()
+      .signInWithEmailAndPassword(values.email, values.password)
+      .then(res => {
+        console.log('success: ', res);
+        Fire.database()
+          .ref(`users/${res.user.uid}/`)
+          .once('value')
+          .then(resDB => {
+            console.log('data user: ', resDB.val());
+            if (resDB.val()) {
+              storeData('user', resDB.val());
+              navigation.replace('Home');
+            }
+          });
+      })
+      .catch(err => {
+        console.log('error: ', err);
+        alert(err);
+      });
+  };
 
   const loginValidationSchema = yup.object().shape({
     email: yup
@@ -32,7 +65,7 @@ const Login = ({navigation}) => {
         <Formik
           validationSchema={loginValidationSchema}
           initialValues={{email: '', password: ''}}
-          onSubmit={values => console.log(values)}>
+          onSubmit={postLogin}>
           {({
             handleChange,
             handleBlur,

@@ -3,11 +3,26 @@ import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
+import {useNavigation} from '@react-navigation/native';
 
 import Gap from '../Gap';
 import {colors, fonts} from '../../utils';
+import {Fire} from '../../configs';
 
 const Header = ({title, primaryTitle, secondaryTitle, type, onPress, src}) => {
+  const navigation = useNavigation();
+  const postLogout = () => {
+    Fire.auth()
+      .signOut()
+      .then(res => {
+        console.log('logout :', res);
+        navigation.replace('Login');
+      })
+      .catch(err => {
+        alert(err);
+      });
+  };
+
   if (type === 'logo') {
     return (
       <SafeAreaView>
@@ -39,17 +54,20 @@ const Header = ({title, primaryTitle, secondaryTitle, type, onPress, src}) => {
   } else if (type === 'main') {
     return (
       <SafeAreaView style={{flexDirection: 'row', alignItems: 'center'}}>
+        <TouchableOpacity onPress={postLogout}>
+          <Text style={styles.secondaryTitle}>Logout</Text>
+        </TouchableOpacity>
         <View
           style={{
             flex: 1,
             alignItems: 'center',
-            marginEnd: ms(-24),
+            marginEnd: ms(24),
           }}>
-          <TouchableOpacity onPress={onPress}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Text style={styles.title}>{primaryTitle}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={() => navigation.navigate('Bag')}>
           <Text style={styles.secondaryTitle}>{secondaryTitle}</Text>
         </TouchableOpacity>
       </SafeAreaView>
