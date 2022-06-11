@@ -55,7 +55,7 @@ const Login = ({navigation}) => {
                 onBlur={handleBlur('email')}
               />
               {errors.email && touched.email && (
-                <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>
+                <Text style={{fontSize: 10, color: 'red'}}>{errors.email}</Text>
               )}
               <Gap height={ms(16)} />
               <TextInput
@@ -67,16 +67,18 @@ const Login = ({navigation}) => {
                 secureTextEntry={true}
                 value={values.password}
                 onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
               />
               {errors.password && touched.password && (
-                <Text style={{ fontSize: 10, color: 'red' }}>{errors.password}</Text>
+                <Text style={{fontSize: 10, color: 'red'}}>
+                  {errors.password}
+                </Text>
               )}
               <Gap height={ms(32)} />
               <Button
                 type={'fullButton'}
                 title={'Login'}
                 onPress={handleSubmit}
-                disabled={!isValid}
                 // () => navigation.replace('Home')
               />
             </>
