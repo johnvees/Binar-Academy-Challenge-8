@@ -60,7 +60,7 @@ const Details = ({navigation, route}) => {
         photo: detailPokemon?.sprites?.other?.home?.front_default,
       };
       Fire.database()
-        .ref(`users/${profile.uid}/${detailPokemon.id}/`)
+        .ref(`users/${profile.uid}/bag/`)
         .push(dataPokemon);
       alert(`Berhasil Menangkap ${detailPokemon.name}`);
       navigation.navigate('Bag');

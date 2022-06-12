@@ -1,0 +1,9 @@
+- terdapat bug sewaktu register, setelah register langsung navigate ke Home screen
+
+- di Home screen list pokemon page pertama tidak bisa langsung ter load
+
+- paginaion belum diberi batasan halaman
+
+- belum bisa menghapus pokemon yang telah ditangkap
+
+- pokemon masih bisa ditangkap berkali kali
