@@ -72,7 +72,7 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header type={'main'} primaryTitle={'PokeDex'} secondaryTitle={'Bag'} />
+      <Header type={'main'} primaryTitle={'PokeDek'} secondaryTitle={'Bag'} />
       <Image
         source={{
           uri: 'https://logos-world.net/wp-content/uploads/2020/05/Pokemon-Logo.png',
