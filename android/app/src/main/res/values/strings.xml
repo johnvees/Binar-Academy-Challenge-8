@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BinarChallenge8</string>
+     <string moduleConfig="true" name="CodePushDeploymentKey">bfBjqPpRDxF59Eka8zVMi2gpfTlPjICIswmo1</string>
 </resources>
