@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
@@ -9,15 +9,27 @@ import axios from 'axios';
 
 import {BASE_URL, colors, fonts} from '../../utils';
 import {Button, Gap, Header} from '../../components';
+import Pagination from './Pagination';
+
+let PageSize = 20;
 
 const Home = () => {
   const [pokemon, setPokemon] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const navigation = useNavigation();
+
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return pokemon.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
+  console.log('ini current', currentTableData);
 
   const getListPokemon = async () => {
     try {
       setPokemon('');
-      const result = await axios.get(`${BASE_URL}`);
+      const result = await axios.get(`${BASE_URL}?limit=500`);
       setPokemon(result.data.results);
       // const getURL = result.data.results.map(name => {
       //   return name.name;
@@ -72,21 +84,17 @@ const Home = () => {
       <FlatList
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        data={pokemon}
+        data={currentTableData}
         keyExtractor={(item, index) => index}
         renderItem={cardPokemon}
       />
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <Button type={'fullButton'} title={'Previous'} />
-        <Text>1</Text>
-        <Button type={'fullButton'} title={'Next'} />
-      </View>
+      <Pagination
+        currentPage={currentPage}
+        totalCount={pokemon.length}
+        pageSize={PageSize}
+        onPageChange={page => setCurrentPage(page)}
+      />
     </SafeAreaView>
   );
 };
