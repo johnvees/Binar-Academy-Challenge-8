@@ -5,7 +5,7 @@ import {ms} from 'react-native-size-matters';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 
-import {colors, fonts} from '../../utils';
+import {colors, fonts, storeData} from '../../utils';
 import {Button, Gap, Header} from '../../components';
 import Fire from '../../configs/Fire';
 
@@ -23,11 +23,14 @@ const Register = ({navigation}) => {
           fullName: values.fullName,
           uid: success.user.uid,
         };
+
         Fire.database()
           .ref('users/' + success.user.uid + '/')
           .set(data);
-        navigation.navigate('FinalRegist', data);
+
+        storeData('user', data);
         console.log('register success: ', success);
+        navigation.navigate('FinalRegist', data);
       })
       .catch(error => {
         console.log('error register: ', error);

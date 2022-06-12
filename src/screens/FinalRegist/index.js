@@ -49,6 +49,7 @@ const FinalRegist = ({navigation, route}) => {
     data.bio = bio;
     console.log(data);
 
+    storeData('user', data);
     navigation.replace('Home');
   };
 

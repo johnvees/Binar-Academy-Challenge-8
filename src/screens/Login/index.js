@@ -7,7 +7,7 @@ import * as yup from 'yup';
 
 import {Fire} from '../../configs';
 import {Button, Gap, Header} from '../../components';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, storeData} from '../../utils';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');

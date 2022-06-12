@@ -6,13 +6,15 @@ import {ms} from 'react-native-size-matters';
 import axios from 'axios';
 import Easing from 'react-native/Libraries/Animated/Easing';
 
-import {BASE_URL, colors, fonts} from '../../utils';
+import {BASE_URL, colors, fonts, getData} from '../../utils';
 import {Button, Gap, Header} from '../../components';
 import {ILFail} from '../../assets/images';
+import {Fire} from '../../configs';
 
 const Details = ({navigation, route}) => {
   const [detailPokemon, setDetailPokemon] = useState([]);
   const [species, setSpecies] = useState([]);
+  const [profile, setProfile] = useState([]);
   const topValue = useState(new Animated.Value(-100))[0];
   const leftValue = useState(new Animated.Value(-600))[0];
   const opacity = useState(new Animated.Value(1))[0];
@@ -50,6 +52,16 @@ const Details = ({navigation, route}) => {
         useNativeDriver: false,
         easing: Easing.back(),
       }).start();
+      dataPokemon = {
+        id: detailPokemon.id,
+        name: detailPokemon.name,
+        height: detailPokemon.height,
+        weight: detailPokemon.weight,
+        photo: detailPokemon?.sprites?.other?.home?.front_default,
+      };
+      Fire.database()
+        .ref(`users/${profile.uid}/${detailPokemon.id}/`)
+        .push(dataPokemon);
       alert(`Berhasil Menangkap ${detailPokemon.name}`);
       navigation.navigate('Bag');
     } else {
@@ -73,7 +85,13 @@ const Details = ({navigation, route}) => {
     }
   };
 
-  const fadeOut = () => {};
+  const getDataUser = () => {
+    getData('user').then(res => {
+      console.log('data user: ', res);
+      const data = res;
+      setProfile(data);
+    });
+  };
 
   // const getSpeciesPokemon = async () => {
   //   try {
@@ -86,7 +104,7 @@ const Details = ({navigation, route}) => {
   // };
 
   useEffect(() => {
-    getDetailsPokemon();
+    getDetailsPokemon(), getDataUser();
   }, []);
 
   return (
