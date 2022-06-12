@@ -1,16 +1,21 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, Animated} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ms} from 'react-native-size-matters';
 import axios from 'axios';
+import Easing from 'react-native/Libraries/Animated/Easing';
 
 import {BASE_URL, colors, fonts} from '../../utils';
 import {Button, Gap, Header} from '../../components';
+import {ILFail} from '../../assets/images';
 
 const Details = ({navigation, route}) => {
   const [detailPokemon, setDetailPokemon] = useState([]);
   const [species, setSpecies] = useState([]);
+  const topValue = useState(new Animated.Value(-100))[0];
+  const leftValue = useState(new Animated.Value(-600))[0];
+  const opacity = useState(new Animated.Value(1))[0];
 
   const getDetailsPokemon = async () => {
     try {
@@ -23,6 +28,52 @@ const Details = ({navigation, route}) => {
       console.log(error);
     }
   };
+
+  const doCatch = () => {
+    const percentage = Math.floor(Math.random() * 101);
+    console.log(percentage);
+    if (percentage >= 70) {
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(topValue, {
+        toValue: -100,
+        duration: 1000,
+        useNativeDriver: false,
+        easing: Easing.back(),
+      }).start();
+      Animated.timing(leftValue, {
+        toValue: -800,
+        duration: 1000,
+        useNativeDriver: false,
+        easing: Easing.back(),
+      }).start();
+      alert(`Berhasil Menangkap ${detailPokemon.name}`);
+      navigation.navigate('Bag');
+    } else {
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(topValue, {
+        toValue: -100,
+        duration: 1000,
+        useNativeDriver: false,
+        easing: Easing.back(),
+      }).start();
+      Animated.timing(leftValue, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: false,
+        easing: Easing.back(),
+      }).start();
+    }
+  };
+
+  const fadeOut = () => {};
 
   // const getSpeciesPokemon = async () => {
   //   try {
@@ -47,11 +98,26 @@ const Details = ({navigation, route}) => {
       />
       <Gap height={ms(24)} />
       <View style={{alignItems: 'center'}}>
-        <Image
+        <Animated.Image
           source={{
             uri: `${detailPokemon?.sprites?.other?.home?.front_default}`,
           }}
-          style={styles.pokeImg}
+          style={{
+            height: ms(100),
+            width: ms(100),
+            resizeMode: 'cover',
+            opacity,
+          }}
+        />
+        <Animated.Image
+          source={ILFail}
+          style={{
+            height: ms(100),
+            width: ms(100),
+            resizeMode: 'cover',
+            marginTop: topValue,
+            marginLeft: leftValue,
+          }}
         />
         <Gap height={ms(16)} />
         <Text style={styles.pokeName}>{detailPokemon.name}</Text>
@@ -113,7 +179,7 @@ const Details = ({navigation, route}) => {
         )}
       />
       <Gap height={ms(32)} />
-      <Button type={'fullButton'} title={'Catch'} />
+      <Button type={'fullButton'} title={'Catch'} onPress={doCatch} />
     </SafeAreaView>
   );
 };
@@ -122,11 +188,12 @@ export default Details;
 
 const styles = StyleSheet.create({
   container: {flex: 1, padding: ms(24), backgroundColor: colors.background},
-  pokeImg: {
+  pokeImg: opacity => ({
     height: ms(100),
     width: ms(100),
     resizeMode: 'cover',
-  },
+    opacity,
+  }),
   pokeName: {
     color: colors.text.primary,
     fontFamily: fonts.primary[500],
